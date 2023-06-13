@@ -1,6 +1,6 @@
 package com.ptit.mybatis.repository;
 
-import com.ptit.mybatis.domain.TblDetailUserJapan;
+import com.ptit.mybatis.entity.TblDetailUserJapan;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

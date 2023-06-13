@@ -1,10 +1,13 @@
 package com.ptit.mybatis.dto.request;
 
+import com.ptit.mybatis.validate.DateFormat;
+import com.ptit.mybatis.validate.EmailFormat;
+import com.ptit.mybatis.validate.PassFormat;
+import com.ptit.mybatis.validate.TelFormat;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -19,16 +22,15 @@ public class CreateTblUserRequest extends TblUserRequest {
     @NotNull
     private String fullName;
 
-    @NotNull
+    @EmailFormat
     private String email;
 
-    @NotNull
+    @TelFormat
     private String tel;
 
-    @NotNull
+    @PassFormat
     private String password;
 
-    @NotNull
+    @DateFormat
     private String birthday;
-
 }

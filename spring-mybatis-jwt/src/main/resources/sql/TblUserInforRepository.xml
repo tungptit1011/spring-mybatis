@@ -41,7 +41,7 @@
         <include refid="Core.pagingSql"></include>
     </select>
 
-    <select id="findTblUserByLoginName" resultType="com.ptit.mybatis.domain.TblUser">
+    <select id="findTblUserByLoginName" resultType="com.ptit.mybatis.entity.TblUser">
         SELECT
         LOGIN_NAME,
         `PASSWORD`,
@@ -50,7 +50,7 @@
         WHERE LOGIN_NAME = #{loginName}
     </select>
 
-    <select id="findTblUserByEmail" resultType="com.ptit.mybatis.domain.TblUser">
+    <select id="findTblUserByEmail" resultType="com.ptit.mybatis.entity.TblUser">
         SELECT USER_ID
         FROM TBL_USER
         WHERE EMAIL = #{email}
@@ -58,7 +58,7 @@
     </select>
 
 
-    <select id="findTblUserByUserId" resultType="com.ptit.mybatis.domain.TblUser">
+    <select id="findTblUserByUserId" resultType="com.ptit.mybatis.entity.TblUser">
         SELECT u.USER_ID USER_ID,
         u.GROUP_ID GROUP_ID,
         j.CODE_LEVEL CODE_LEVEL FROM tbl_user u
@@ -68,7 +68,7 @@
         WHERE u.USER_ID = #{userId}
     </select>
 
-    <update id="updateTblUser" parameterType="com.ptit.mybatis.domain.TblUser">
+    <update id="updateTblUser" parameterType="com.ptit.mybatis.entity.TblUser">
         UPDATE TBL_USER
         <set>
             <if test="tblUser.groupId != null">GROUP_ID = #{tblUser.groupId} ,</if>
@@ -82,7 +82,7 @@
         WHERE USER_ID = #{tblUser.userId}
     </update>
 
-    <insert id="insertTblUser" parameterType="com.ptit.mybatis.domain.TblUser" useGeneratedKeys="true"
+    <insert id="insertTblUser" parameterType="com.ptit.mybatis.entity.TblUser" useGeneratedKeys="true"
             keyProperty="userId" keyColumn="USER_ID">
         INSERT INTO TBL_USER(GROUP_ID, LOGIN_NAME, `PASSWORD`, FULL_NAME, FULL_NAME_KANA, EMAIL, TEL, BIRTHDAY, RULE)
         VALUES (#{tblUser.groupId}, #{tblUser.loginName}, #{tblUser.password}, #{tblUser.fullName},

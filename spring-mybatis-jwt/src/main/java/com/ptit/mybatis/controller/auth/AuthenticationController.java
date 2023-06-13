@@ -5,6 +5,7 @@ import com.ptit.mybatis.dto.auth.AuthenticationRequest;
 import com.ptit.mybatis.dto.auth.AuthenticationResponse;
 import com.ptit.mybatis.service.CustomUserDetailsService;
 import io.jsonwebtoken.impl.DefaultClaims;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +32,7 @@ public class AuthenticationController {
     private JwtUtil jwtUtil;
 
     @PostMapping(value = "/authenticate")
+    @Operation(summary = "get token")
     public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws Exception {
         try {
@@ -48,6 +50,7 @@ public class AuthenticationController {
     }
 
     @GetMapping(value = "/refreshtoken")
+    @Operation(summary = "refresh token")
     public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
         // From the HttpRequest get the claims
         DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");

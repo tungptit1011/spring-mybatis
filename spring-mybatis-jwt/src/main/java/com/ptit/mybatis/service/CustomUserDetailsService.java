@@ -1,6 +1,6 @@
 package com.ptit.mybatis.service;
 
-import com.ptit.mybatis.domain.TblUser;
+import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.repository.TblUserInforRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

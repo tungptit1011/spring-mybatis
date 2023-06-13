@@ -28,8 +28,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		 try{
-			// JWT Token is in the form "Bearer token". Remove Bearer word and
-			// get  only the Token
 			String jwtToken = extractJwtFromRequest(request);
 
 			if (StringUtils.hasText(jwtToken) && jwtTokenUtil.validateToken(jwtToken)) {
@@ -38,9 +36,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
-				// After setting the Authentication in the context, we specify
-				// that the current user is authenticated. So it passes the
-				// Spring Security Configurations successfully.
 				SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 			} else {
 				System.out.println("Cannot set the Security Context");
@@ -49,7 +44,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 		 {
 			 String isRefreshToken = request.getHeader("isRefreshToken");
 				String requestURL = request.getRequestURL().toString();
-				// allow for Refresh Token creation if following conditions are true.
 				if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refreshtoken")) {
 					allowForRefreshToken(ex, request);
 				} else
@@ -64,15 +58,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 	
 	private void allowForRefreshToken(ExpiredJwtException ex, HttpServletRequest request) {
 
-		// create a UsernamePasswordAuthenticationToken with null values.
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				null, null, null);
-		// After setting the Authentication in the context, we specify
-		// that the current user is authenticated. So it passes the
-		// Spring Security Configurations successfully.
 		SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-		// Set the claims so that in controller we will be using it to create
-		// new JWT
 		request.setAttribute("claims", ex.getClaims());
 
 	}

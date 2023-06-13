@@ -1,7 +1,7 @@
 package com.ptit.mybatis.service.tblUser;
 
-import com.ptit.mybatis.domain.TblDetailUserJapan;
-import com.ptit.mybatis.domain.TblUser;
+import com.ptit.mybatis.entity.TblDetailUserJapan;
+import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.dto.request.CreateTblUserRequest;
 import com.ptit.mybatis.dto.request.TblUserRequest;
 import com.ptit.mybatis.dto.request.UpdateTblUserRequest;
@@ -119,7 +119,7 @@ public class TblUserServiceImpl implements TblUserService {
                 TblDetailUserJapan tblDetailUserJapan = convertTblDetailUserJapan(tblUserRequest);
                 tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapan);
             }
-            return new BaseResponse(new Meta("200", "Create Success"), tblUser);
+            return new BaseResponse(new Meta("200", "Create Success"));
         } catch (Exception exception) {
             return new BaseResponse(new Meta("200", "Create Fail"), exception.getStackTrace());
         }
