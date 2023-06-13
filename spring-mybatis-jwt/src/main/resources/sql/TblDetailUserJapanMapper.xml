@@ -3,13 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ptit.mybatis.repository.TblDetailUserJapanRepository">
-    <insert id="insertTblDetailUserJapan" parameterType="com.ptit.mybatis.domain.TblDetailUserJapan" useGeneratedKeys="true" keyColumn="DETAIL_USER_JAPAN_ID">
+    <insert id="insertTblDetailUserJapan" parameterType="com.ptit.mybatis.entity.TblDetailUserJapan" useGeneratedKeys="true" keyColumn="DETAIL_USER_JAPAN_ID">
         INSERT INTO TBL_DETAIL_USER_JAPAN(USER_ID, CODE_LEVEL, START_DATE, END_DATE, TOTAL)
         VALUES(#{tblDetailUserJapan.userId} , #{tblDetailUserJapan.codeLevel}, #{tblDetailUserJapan.startDate},
         #{tblDetailUserJapan.endDate}, #{tblDetailUserJapan.total})
     </insert>
 
-    <update id="updateTblDetailUserJapan" parameterType="com.ptit.mybatis.domain.TblDetailUserJapan">
+    <update id="updateTblDetailUserJapan" parameterType="com.ptit.mybatis.entity.TblDetailUserJapan">
         UPDATE TBL_DETAIL_USER_JAPAN
         <set>
             <if test="tblDetailUserJapan.codeLevel != null">CODE_LEVEL = #{tblDetailUserJapan.codeLevel} ,</if>
@@ -24,7 +24,7 @@
         DELETE FROM TBL_DETAIL_USER_JAPAN WHERE USER_ID = #{userId}
     </delete>
 
-    <select id="findTblDetailUserJapanByUserId" resultType="com.ptit.mybatis.domain.TblDetailUserJapan">
+    <select id="findTblDetailUserJapanByUserId" resultType="com.ptit.mybatis.entity.TblDetailUserJapan">
         SELECT DETAIL_USER_JAPAN_ID,
                 USER_ID,
                 CODE_LEVEL,

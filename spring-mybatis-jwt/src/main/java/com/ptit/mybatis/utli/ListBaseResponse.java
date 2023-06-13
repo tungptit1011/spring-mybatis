@@ -34,9 +34,10 @@ public class ListBaseResponse<T> extends Meta {
         message = "Success";
     }
 
-    public ListBaseResponse(Meta meta) {
+    public ListBaseResponse(Meta meta, List<T> data) {
         code = meta.getCode();
         message = meta.getMessage();
+        this.data = data;
     }
 
     @Data

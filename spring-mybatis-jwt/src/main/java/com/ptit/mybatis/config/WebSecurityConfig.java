@@ -48,16 +48,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/h2-console/**");
+        web.ignoring().antMatchers("/h2-console/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/rest/api/tbl-user/**").hasRole("ADMIN")
+//                .antMatchers("/rest/api/tbl-user/**").hasRole("ADMIN")
                 .antMatchers("/rest/api/mst-japan/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/rest/api/authenticate").permitAll().anyRequest().authenticated()
+                .antMatchers("/rest/api/authenticate", "/rest/api/tbl-user/**").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
                 and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and().addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

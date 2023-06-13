@@ -1,4 +1,4 @@
-package com.ptit.mybatis.domain;
+package com.ptit.mybatis.entity;
 
 import lombok.Getter;
 import lombok.Setter;

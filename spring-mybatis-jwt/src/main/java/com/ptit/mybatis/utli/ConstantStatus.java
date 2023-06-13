@@ -8,4 +8,6 @@ public class ConstantStatus {
     public static final String INTERNAL_SERVER_ERROR = "500";
 
     public static final String UNAUTHORIZED = "401";
+
+    public static final String BAD_REQUEST = "400";
 }

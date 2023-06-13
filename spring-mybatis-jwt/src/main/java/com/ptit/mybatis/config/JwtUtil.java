@@ -1,6 +1,7 @@
 package com.ptit.mybatis.config;
 
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-
+@Slf4j
 @Service
 public class JwtUtil {
 	private String secret;
@@ -66,8 +67,10 @@ public class JwtUtil {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(authToken);
 			return true;
 		} catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
+			log.error(ex.getMessage());
 			throw new BadCredentialsException("INVALID_CREDENTIALS", ex);
 		} catch (ExpiredJwtException ex) {
+			log.error(ex.getMessage());
 			throw ex;
 		}
 	}

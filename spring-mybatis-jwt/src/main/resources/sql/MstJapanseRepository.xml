@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ptit.mybatis.repository.MstJapanseRepository">
-    <select id="getAllMstJapanese" resultType="com.ptit.mybatis.dto.response.MstGroupResponse">
+    <select id="getAllMstJapanese" resultType="com.ptit.mybatis.dto.response.MstJapanseResponse">
         SELECT CODE_LEVEL, NAME_LEVEL
         FROM MST_JAPANSE
         <if test="page.sort.sorted">
@@ -16,7 +16,7 @@
         <include refid="Core.pagingSql"></include>
     </select>
 
-    <select id="getMstJapaneseByCodeLevel" resultType="com.ptit.mybatis.dto.response.MstGroupResponse">
+    <select id="getMstJapaneseByCodeLevel" resultType="com.ptit.mybatis.dto.response.MstJapanseResponse">
         SELECT CODE_LEVEL, NAME_LEVEL
         FROM MST_JAPANSE
         WHERE CODE_LEVEL = #{codeLevel};

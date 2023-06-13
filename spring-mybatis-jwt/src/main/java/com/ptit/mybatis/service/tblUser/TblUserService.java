@@ -1,6 +1,6 @@
 package com.ptit.mybatis.service.tblUser;
 
-import com.ptit.mybatis.domain.TblUser;
+import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.dto.request.CreateTblUserRequest;
 import com.ptit.mybatis.dto.request.UpdateTblUserRequest;
 import com.ptit.mybatis.dto.response.TblUserInforResponse;
