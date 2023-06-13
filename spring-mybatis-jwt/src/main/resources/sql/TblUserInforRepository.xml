@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptit.mybatis.repository.TblUserInforRepository">
+    <select id="getListlUsers" resultType="com.ptit.mybatis.dto.response.TblUserInforResponse">
+        <if test="fullName != null">
+            <bind name="fullName" value="'%' + fullName + '%'"/>
+        </if>
+        SELECT u.USER_ID USER_ID,
+        u.FULL_NAME FULL_NAME,
+        u.BIRTHDAY BIRTHDAY,
+        g.GROUP_NAME GROUP_NAME,
+        u.EMAIL EMAIL,
+        u.TEL TEL,
+        j.NAME_LEVEL NAME_LEVEL,
+        d.END_DATE END_DATE,
+        d.TOTAL TOTAL,
+        u.GROUP_ID GROUP_ID,
+        j.CODE_LEVEL CODE_LEVEL FROM tbl_user u
+        INNER JOIN MST_GROUP g ON g.group_id = u.group_id
+        LEFT JOIN TBL_DETAIL_USER_JAPAN d ON d.user_id = u.user_id
+        LEFT JOIN MST_JAPANSE j ON j.code_level = d.code_level
+        <where>
+            <if test="groupId != null">
+                u.GROUP_ID = #{groupId}
+            </if>
+            <if test="fullName != null">
+                AND Lower(FULL_NAME) LIKE Lower(#{fullName})
+            </if>
+        </where>
+        <!--        WHERE u.GROUP_ID = #{groupId}-->
+        <!--        AND Lower(FULL_NAME) LIKE Lower(#{fullName})-->
+        <if test="page.sort.sorted">
+            <trim prefix="order by">
+                <foreach item="order" index="i" collection="page.sort" separator=", ">
+                    ${order.property} ${order.direction}
+                </foreach>
+            </trim>
+        </if>
+        <include refid="Core.pagingSql"></include>
+    </select>
+
+    <select id="findTblUserByLoginName" resultType="com.ptit.mybatis.domain.TblUser">
+        SELECT
+        LOGIN_NAME,
+        `PASSWORD`,
+        RULE
+        FROM TBL_USER
+        WHERE LOGIN_NAME = #{loginName}
+    </select>
+
+    <select id="findTblUserByEmail" resultType="com.ptit.mybatis.domain.TblUser">
+        SELECT USER_ID
+        FROM TBL_USER
+        WHERE EMAIL = #{email}
+        LIMIT 1
+    </select>
+
+
+    <select id="findTblUserByUserId" resultType="com.ptit.mybatis.domain.TblUser">
+        SELECT u.USER_ID USER_ID,
+        u.GROUP_ID GROUP_ID,
+        j.CODE_LEVEL CODE_LEVEL FROM tbl_user u
+        INNER JOIN MST_GROUP g ON g.GROUP_ID = u.GROUP_ID
+        LEFT JOIN TBL_DETAIL_USER_JAPAN d ON d.USER_ID = u.USER_ID
+        LEFT JOIN MST_JAPANSE j ON j.CODE_LEVEL = d.CODE_LEVEL
+        WHERE u.USER_ID = #{userId}
+    </select>
+
+    <update id="updateTblUser" parameterType="com.ptit.mybatis.domain.TblUser">
+        UPDATE TBL_USER
+        <set>
+            <if test="tblUser.groupId != null">GROUP_ID = #{tblUser.groupId} ,</if>
+            <if test="tblUser.loginName != null">LOGIN_NAME = #{tblUser.loginName} ,</if>
+            <if test="tblUser.fullName != null">FULL_NAME = #{tblUser.fullName},</if>
+            <if test="tblUser.fullNameKana != null">FULL_NAME_KANA = #{tblUser.fullNameKana} ,</if>
+            <if test="tblUser.email != null">EMAIL = #{tblUser.email} ,</if>
+            <if test="tblUser.tel != null">TEL = #{tblUser.tel} ,</if>
+            <if test="tblUser.birthday != null">BIRTHDAY = #{tblUser.birthday}</if>
+        </set>
+        WHERE USER_ID = #{tblUser.userId}
+    </update>
+
+    <insert id="insertTblUser" parameterType="com.ptit.mybatis.domain.TblUser" useGeneratedKeys="true"
+            keyProperty="userId" keyColumn="USER_ID">
+        INSERT INTO TBL_USER(GROUP_ID, LOGIN_NAME, `PASSWORD`, FULL_NAME, FULL_NAME_KANA, EMAIL, TEL, BIRTHDAY, RULE)
+        VALUES (#{tblUser.groupId}, #{tblUser.loginName}, #{tblUser.password}, #{tblUser.fullName},
+        #{tblUser.fullNameKana}, #{tblUser.email}, #{tblUser.tel}, #{tblUser.birthday}, #{tblUser.rule})
+    </insert>
+
+    <delete id="deleteTblUser" parameterType="java.lang.Integer">
+        DELETE FROM TBL_USER WHERE USER_ID = #{userId};
+    </delete>
+</mapper>

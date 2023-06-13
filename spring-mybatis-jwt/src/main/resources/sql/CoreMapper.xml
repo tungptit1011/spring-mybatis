@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Core">
+
+    <sql id="pagingSql">
+<!--        <if test="_databaseId= 'h2">-->
+            OFFSET #{page.offset} ROWS FETCH NEXT #{page.pageSize} ROWS ONLY
+<!--        </if>-->
+    </sql>
+</mapper>
