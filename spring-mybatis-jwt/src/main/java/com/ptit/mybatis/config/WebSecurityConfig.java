@@ -55,9 +55,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-//                .antMatchers("/rest/api/tbl-user/**").hasRole("ADMIN")
+                .antMatchers("/rest/api/tbl-user/**").hasRole("ADMIN")
                 .antMatchers("/rest/api/mst-japan/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/rest/api/authenticate", "/rest/api/tbl-user/**").permitAll().anyRequest().authenticated()
+                .antMatchers("/rest/api/authenticate").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
                 and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and().addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
