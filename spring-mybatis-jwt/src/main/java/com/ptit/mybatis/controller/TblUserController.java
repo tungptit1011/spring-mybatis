@@ -19,7 +19,6 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(ConstantUrl.V1_API + "/tbl-user")
-@Scope("prototype")
 public class TblUserController {
 
     private TblUserService tblUserService;

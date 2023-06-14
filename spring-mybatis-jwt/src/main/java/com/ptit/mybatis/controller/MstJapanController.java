@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(ConstantUrl.V1_API + "/mst-japan")
-@Scope("prototype")
 public class MstJapanController {
 
     private static final Logger logger = LoggerFactory.getLogger(MstJapanController.class);
