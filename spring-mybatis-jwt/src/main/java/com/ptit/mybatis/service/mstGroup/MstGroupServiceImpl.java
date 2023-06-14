@@ -31,9 +31,8 @@ public class MstGroupServiceImpl implements MstGroupService {
     @Override
     public BaseResponse getMstGroupByGroupId(Integer id) {
         log.info("get Mst Group By GroupId: {}", id);
-        if (id == null) {
+        if (id == 0) {
             return new BaseResponse(new Meta("200", "Department does not exist !"));
-
         }
         MstGroupResponse mstGroupResponse = mstGroupRepository.getMstGroupByGroupId(id);
         if (mstGroupResponse == null) {
