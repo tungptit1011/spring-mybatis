@@ -11,7 +11,7 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String errorStatus, String msg) {
         this.errorStatus = errorStatus;
-        this.errorStatus = msg;
+        this.msg = msg;
     }
 
     public BusinessException(String msg) {

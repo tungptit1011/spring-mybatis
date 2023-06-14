@@ -26,6 +26,11 @@ public class ApiExceptionHandler {
         return new BaseResponse(new Meta(ConstantStatus.INTERNAL_SERVER_ERROR, ex.getMessage()));
     }
 
+    @ExceptionHandler(BusinessException.class)
+    public BaseResponse handleBusinessException(BusinessException ex) {
+        return new BaseResponse(new Meta(ConstantStatus.OK, ex.getMsg()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<List> handleBindingException(MethodArgumentNotValidException ex) {
         log.info(ex.getClass().getName());

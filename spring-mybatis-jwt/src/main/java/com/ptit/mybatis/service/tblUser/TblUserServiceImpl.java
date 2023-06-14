@@ -6,6 +6,7 @@ import com.ptit.mybatis.dto.request.UpdateTblUserRequest;
 import com.ptit.mybatis.dto.response.TblUserInforResponse;
 import com.ptit.mybatis.entity.TblDetailUserJapan;
 import com.ptit.mybatis.entity.TblUser;
+import com.ptit.mybatis.exception.BusinessException;
 import com.ptit.mybatis.repository.MstGroupRepository;
 import com.ptit.mybatis.repository.MstJapanseRepository;
 import com.ptit.mybatis.repository.TblDetailUserJapanRepository;
@@ -61,8 +62,7 @@ public class TblUserServiceImpl implements TblUserService {
         log.info("Delete User by: {}", userId);
         if (userId == 0) {
             return new BaseResponse(new Meta("200", "User does not exist"));
-        }
-        if (tblUserRepository.findTblUserByUserId(userId) == null) {
+        } else if (tblUserRepository.findTblUserByUserId(userId) == null) {
             return new BaseResponse(new Meta("200", "User does not exist"), "userID: " + userId);
         }
         tblUserRepository.deleteTblUser(userId);
@@ -90,7 +90,7 @@ public class TblUserServiceImpl implements TblUserService {
         TblDetailUserJapan tblDetailUserJapanRequest = convertTblDetailUserJapan(tblUserRequest);
         if (!StringUtils.isEmpty(tblUserRequest.getCodeLevel())) {
             if (mstJapanseRepository.getMstJapaneseByCodeLevel(tblUserRequest.getCodeLevel()) == null) {
-                return new BaseResponse(new Meta("200", "Japanese level dose not exist !"), tblUserRequest);
+                throw new BusinessException("200", "Japanese level dose not exist !");
             }
             if (tblDetailUserJapanInDB == null) {
                 tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapanRequest);
@@ -115,18 +115,20 @@ public class TblUserServiceImpl implements TblUserService {
         if (tblUserRepository.findTblUserByLoginName(tblUserRequest.getLoginName()) != null) {
             return new BaseResponse(new Meta("200", "UserName already exists !"));
         }
-        if(tblUserRequest.getGroupId() != null && mstGroupRepository.getMstGroupByGroupId(tblUserRequest.getGroupId()) == null) {
+        if(mstGroupRepository.getMstGroupByGroupId(tblUserRequest.getGroupId()) == null) {
             return new BaseResponse(new Meta("200", "Department does not exist !"));
         }
         tblUserRequest.setPassword(passwordEncoder.encode(tblUserRequest.getPassword()));
         TblUser tblUser = modelMapper.map(tblUserRequest, TblUser.class);
+        //insert TblUser into DB
         tblUserRepository.insertTblUser(tblUser);
         tblUserRequest.setUserId(tblUser.getUserId());
         if (tblUserRequest.getCodeLevel() != null) {
             if (mstJapanseRepository.getMstJapaneseByCodeLevel(tblUserRequest.getCodeLevel()) == null) {
-                return new BaseResponse(new Meta("200", "Japanese level dose not exist !"), tblUserRequest);
+                throw new BusinessException("200", "Japanese level dose not exist !");
             }
             TblDetailUserJapan tblDetailUserJapan = convertTblDetailUserJapan(tblUserRequest);
+            //insert Japanse into DB
             tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapan);
         }
         return new BaseResponse(new Meta("200", "Create Success"));
