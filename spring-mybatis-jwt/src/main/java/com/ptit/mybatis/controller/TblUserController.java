@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@SecurityRequirement(name = "BearerAuth")
 @RestController
 @RequestMapping(ConstantUrl.V1_API + "/tbl-user")
 @Scope("prototype")

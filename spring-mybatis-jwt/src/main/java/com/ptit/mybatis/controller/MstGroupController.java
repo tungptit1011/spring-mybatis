@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SecurityRequirement(name = "BearerAuth")
 @RestController
 @RequestMapping(ConstantUrl.V1_API + "/mst-group")
 @Scope("prototype")
