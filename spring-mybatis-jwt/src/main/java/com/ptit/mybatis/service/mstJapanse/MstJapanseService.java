@@ -1,12 +1,13 @@
 package com.ptit.mybatis.service.mstJapanse;
 
 import com.ptit.mybatis.dto.response.MstJapanseResponse;
+import com.ptit.mybatis.utils.BaseResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface MstJapanseService {
-    List<MstJapanseResponse> getAllMstJapanese(Pageable pageable);
+    List<MstJapanseResponse> getListMstJapanese(Pageable pageable);
 
-    MstJapanseResponse getMstJapaneseByCodeLevel(String codeLevel);
+    BaseResponse getMstJapaneseByCodeLevel(String codeLevel);
 }

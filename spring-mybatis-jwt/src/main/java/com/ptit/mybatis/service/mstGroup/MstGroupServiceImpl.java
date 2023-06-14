@@ -2,6 +2,9 @@ package com.ptit.mybatis.service.mstGroup;
 
 import com.ptit.mybatis.dto.response.MstGroupResponse;
 import com.ptit.mybatis.repository.MstGroupRepository;
+import com.ptit.mybatis.utils.BaseResponse;
+import com.ptit.mybatis.utils.Meta;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MstGroupServiceImpl implements MstGroupService {
 
     private static final Logger logger = LoggerFactory.getLogger(MstGroupServiceImpl.class);
@@ -19,14 +23,22 @@ public class MstGroupServiceImpl implements MstGroupService {
     private MstGroupRepository mstGroupRepository;
 
     @Override
-    public List<MstGroupResponse> getAllMstGroup(Pageable pageable) {
-        return mstGroupRepository.getAllMstGroup(pageable);
+    public List<MstGroupResponse> getListMstGroup(Pageable pageable) {
+        log.info("Get list mst group, page: {}, size: {}, sort:{} ", pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().toString());
+        return mstGroupRepository.getListMstGroup(pageable);
     }
 
     @Override
-    public MstGroupResponse getMstGroupByGroupId(Integer groupId) {
-        if (groupId == null) {
-            return null;
-        } else return mstGroupRepository.getMstGroupByGroupId(groupId);
+    public BaseResponse getMstGroupByGroupId(Integer id) {
+        log.info("get Mst Group By GroupId: {}", id);
+        if (id == null) {
+            return new BaseResponse(new Meta("200", "Department does not exist !"));
+
+        }
+        MstGroupResponse mstGroupResponse = mstGroupRepository.getMstGroupByGroupId(id);
+        if (mstGroupResponse == null) {
+            return new BaseResponse(new Meta("200", "Department does not exist !"));
+        }
+        return new BaseResponse(new Meta("200", "Success"), mstGroupResponse);
     }
 }

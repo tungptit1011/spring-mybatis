@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface MstGroupRepository {
-    List<MstGroupResponse> getAllMstGroup(@Param("page") Pageable pageable);
+    List<MstGroupResponse> getListMstGroup(@Param("page") Pageable pageable);
 
     MstGroupResponse getMstGroupByGroupId(@Param("groupId") Integer groupId);
 }

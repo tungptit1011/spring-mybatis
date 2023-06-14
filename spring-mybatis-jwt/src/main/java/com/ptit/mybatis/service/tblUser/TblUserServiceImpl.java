@@ -7,10 +7,12 @@ import com.ptit.mybatis.dto.response.TblUserInforResponse;
 import com.ptit.mybatis.entity.TblDetailUserJapan;
 import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.repository.MstGroupRepository;
+import com.ptit.mybatis.repository.MstJapanseRepository;
 import com.ptit.mybatis.repository.TblDetailUserJapanRepository;
 import com.ptit.mybatis.repository.TblUserInforRepository;
 import com.ptit.mybatis.utils.BaseResponse;
 import com.ptit.mybatis.utils.Meta;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.List;
 
 @Service
 @Transactional
+@Slf4j
 public class TblUserServiceImpl implements TblUserService {
 
     @Autowired
@@ -30,6 +33,9 @@ public class TblUserServiceImpl implements TblUserService {
 
     @Autowired
     private MstGroupRepository mstGroupRepository;
+
+    @Autowired
+    private MstJapanseRepository mstJapanseRepository;
 
     @Autowired
     private TblDetailUserJapanRepository tblDetailUserJapanRepository;
@@ -52,18 +58,20 @@ public class TblUserServiceImpl implements TblUserService {
 
     @Override
     public BaseResponse deleteTblUser(Integer userId) {
-        if (userId != null) {
-            if (tblUserRepository.findTblUserByUserId(userId) == null) {
-                return new BaseResponse(new Meta("200", "User does not exist"), "userID: " + userId);
-            }
-            tblUserRepository.deleteTblUser(userId);
-            return new BaseResponse(new Meta("200", "Delete success"), "userID: " + userId);
+        log.info("Delete User by: {}", userId);
+        if (userId == 0) {
+            return new BaseResponse(new Meta("200", "User does not exist"));
         }
-        return new BaseResponse(new Meta("200", "Delete Fail"), "userID: " + userId);
+        if (tblUserRepository.findTblUserByUserId(userId) == null) {
+            return new BaseResponse(new Meta("200", "User does not exist"), "userID: " + userId);
+        }
+        tblUserRepository.deleteTblUser(userId);
+        return new BaseResponse(new Meta("200", "Delete success"), "userID: " + userId);
     }
 
     @Override
     public BaseResponse updateTblUser(UpdateTblUserRequest tblUserRequest) {
+        log.info("Update User: {}", tblUserRequest.toString());
         if (tblUserRepository.findTblUserByUserId(tblUserRequest.getUserId()) == null) {
             return new BaseResponse(new Meta("200", "TblUser dont exits !"), tblUserRequest);
         }
@@ -81,9 +89,12 @@ public class TblUserServiceImpl implements TblUserService {
         TblDetailUserJapan tblDetailUserJapanInDB = tblDetailUserJapanRepository.findTblDetailUserJapanByUserId(tblUserRequest.getUserId());
         TblDetailUserJapan tblDetailUserJapanRequest = convertTblDetailUserJapan(tblUserRequest);
         if (!StringUtils.isEmpty(tblUserRequest.getCodeLevel())) {
+            if (mstJapanseRepository.getMstJapaneseByCodeLevel(tblUserRequest.getCodeLevel()) == null) {
+                return new BaseResponse(new Meta("200", "Japanese level dose not exist !"), tblUserRequest);
+            }
             if (tblDetailUserJapanInDB == null) {
                 tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapanRequest);
-            } else if (tblDetailUserJapanInDB != null && !checkStatusTblDetailUserJapan(tblDetailUserJapanInDB, tblUserRequest)) {
+            } else if (!checkStatusTblDetailUserJapan(tblDetailUserJapanInDB, tblUserRequest)) {
                 tblDetailUserJapanRepository.updateTblDetailUserJapan(tblDetailUserJapanRequest);
             }
         } else {
@@ -97,7 +108,7 @@ public class TblUserServiceImpl implements TblUserService {
 
     @Override
     public BaseResponse createTblUser(CreateTblUserRequest tblUserRequest) {
-
+        log.info("Create User: {}", tblUserRequest.toString());
         if (tblUserRepository.findTblUserByEmail(tblUserRequest.getEmail()) != null) {
             return new BaseResponse(new Meta("200", "Email already exists !"));
         }
@@ -109,6 +120,9 @@ public class TblUserServiceImpl implements TblUserService {
         tblUserRepository.insertTblUser(tblUser);
         tblUserRequest.setUserId(tblUser.getUserId());
         if (tblUserRequest.getCodeLevel() != null) {
+            if (mstJapanseRepository.getMstJapaneseByCodeLevel(tblUserRequest.getCodeLevel()) == null) {
+                return new BaseResponse(new Meta("200", "Japanese level dose not exist !"), tblUserRequest);
+            }
             TblDetailUserJapan tblDetailUserJapan = convertTblDetailUserJapan(tblUserRequest);
             tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapan);
         }
@@ -118,6 +132,7 @@ public class TblUserServiceImpl implements TblUserService {
     private TblDetailUserJapan convertTblDetailUserJapan(TblUserRequest tblUserRequest) {
         TblDetailUserJapan tblDetailUserJapan = new TblDetailUserJapan();
         if ("com.ptit.mybatis.dto.request.UpdateTblUserRequest".equalsIgnoreCase(tblUserRequest.getClass().getName())) {
+            log.info("tblUserRequest is UpdateTblUserRequest");
             UpdateTblUserRequest updateTblUserRequest = (UpdateTblUserRequest) tblUserRequest;
             tblDetailUserJapan.setUserId(updateTblUserRequest.getUserId());
             tblDetailUserJapan.setTotal(updateTblUserRequest.getTotal());
@@ -125,6 +140,7 @@ public class TblUserServiceImpl implements TblUserService {
             tblDetailUserJapan.setEndDate(updateTblUserRequest.getEndDate());
             tblDetailUserJapan.setCodeLevel(updateTblUserRequest.getCodeLevel());
         } else if ("com.ptit.mybatis.dto.request.CreateTblUserRequest".equalsIgnoreCase(tblUserRequest.getClass().getName())) {
+            log.info("tblUserRequest is CreateTblUserRequest");
             CreateTblUserRequest createTblUserRequest = (CreateTblUserRequest) tblUserRequest;
             tblDetailUserJapan.setUserId(createTblUserRequest.getUserId());
             tblDetailUserJapan.setTotal(createTblUserRequest.getTotal());
@@ -137,14 +153,19 @@ public class TblUserServiceImpl implements TblUserService {
 
     private Boolean checkStatusTblDetailUserJapan(TblDetailUserJapan tblDetailUserJapan, UpdateTblUserRequest tblUserRequest) {
         if (tblDetailUserJapan.getCodeLevel() != tblUserRequest.getCodeLevel()) {
+            log.info("Different level, previous level: {}, next level: {} ", tblDetailUserJapan.getCodeLevel(), tblUserRequest.getCodeLevel());
             return false;
         } else if (tblDetailUserJapan.getTotal() != tblUserRequest.getTotal()) {
+            log.info("Different total, previous total: {}, next total: {} ", tblDetailUserJapan.getTotal(), tblUserRequest.getTotal());
             return false;
         } else if (tblDetailUserJapan.getStartDate() != tblUserRequest.getStartDate()) {
+            log.info("Different start date, previous date: {}, next date: {} ", tblDetailUserJapan.getStartDate(), tblUserRequest.getStartDate());
             return false;
         } else if (tblDetailUserJapan.getEndDate() != tblUserRequest.getEndDate()) {
+            log.info("Different end date, previous date: {}, next date: {} ", tblDetailUserJapan.getEndDate(), tblUserRequest.getEndDate());
             return false;
         }
+        log.info("Japanese no change");
         return true;
     }
 }

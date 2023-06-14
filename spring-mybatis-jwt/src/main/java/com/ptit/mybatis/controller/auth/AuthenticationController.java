@@ -9,6 +9,7 @@ import com.ptit.mybatis.utils.ConstantUrl;
 import com.ptit.mybatis.utils.Meta;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(ConstantUrl.V1_API)
+@Slf4j
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -49,6 +51,7 @@ public class AuthenticationController {
 
         UserDetails userdetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = jwtUtil.generateToken(userdetails);
+        log.info("token: {}", token);
         return new BaseResponse<>(new Meta("200", "Success"), new AuthenticationResponse(token));
     }
 
@@ -60,6 +63,7 @@ public class AuthenticationController {
 
         Map<String, Object> expectedMap = getMapFromIoJsonwebtokenClaims(claims);
         String token = jwtUtil.doGenerateRefreshToken(expectedMap, expectedMap.get("sub").toString());
+        log.info("token: {}", token);
         return new BaseResponse<>(new Meta("200", "Success"), new AuthenticationResponse(token));
     }
 

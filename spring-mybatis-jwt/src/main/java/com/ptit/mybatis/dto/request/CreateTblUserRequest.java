@@ -6,11 +6,13 @@ import com.ptit.mybatis.validate.PassFormat;
 import com.ptit.mybatis.validate.TelFormat;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
+@ToString
 public class CreateTblUserRequest extends TblUserRequest {
     private Integer userId;
     @NotNull

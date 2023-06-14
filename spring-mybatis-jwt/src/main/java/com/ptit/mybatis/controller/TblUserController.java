@@ -31,7 +31,7 @@ public class TblUserController {
 
     @GetMapping("/list")
     @Operation(summary = "Get list infor of user")
-    public ListBaseResponse<TblUserInforResponse> getListUsers(@RequestParam(name = "groupId", required = false) Integer groupId, @RequestParam(name = "fullName", required = false) String fullName, Pageable pageable) {
+    public ListBaseResponse<TblUserInforResponse> getListTblUsers(@RequestParam(name = "groupId", required = false) Integer groupId, @RequestParam(name = "fullName", required = false) String fullName, Pageable pageable) {
         return new ListBaseResponse<TblUserInforResponse>(new PageImpl<>(tblUserService.getListlUsers(groupId, fullName, pageable)));
     }
 
@@ -50,11 +50,11 @@ public class TblUserController {
     @DeleteMapping("/delete/{userId}")
     @Operation(summary = "Delete user by id")
     public BaseResponse deleteTblUser(@PathVariable String userId) {
-        Integer id = null;
+        Integer id;
         try {
             id = Integer.valueOf(userId);
         } catch (NumberFormatException e) {
-            return new BaseResponse(new Meta("200", "Requires enter in the correct format of the real number type"), "Userid: " + userId);
+            id = 0;
         }
         return tblUserService.deleteTblUser(id);
     }

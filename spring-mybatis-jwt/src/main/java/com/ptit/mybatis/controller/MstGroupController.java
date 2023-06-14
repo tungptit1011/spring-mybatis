@@ -2,6 +2,7 @@ package com.ptit.mybatis.controller;
 
 import com.ptit.mybatis.dto.response.MstGroupResponse;
 import com.ptit.mybatis.service.mstGroup.MstGroupService;
+import com.ptit.mybatis.utils.BaseResponse;
 import com.ptit.mybatis.utils.ConstantUrl;
 import com.ptit.mybatis.utils.ListBaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,14 +30,20 @@ public class MstGroupController {
     private MstGroupService mstGroupService;
 
     @GetMapping("/list")
-    @Operation(summary = "Get all the departments")
-    public ListBaseResponse<MstGroupResponse> getAllMstGroup(Pageable pageable) {
-        return new ListBaseResponse<>(new PageImpl<>(mstGroupService.getAllMstGroup(pageable)));
+    @Operation(summary = "Get list the departments")
+    public ListBaseResponse<MstGroupResponse> getListMstGroup(Pageable pageable) {
+        return new ListBaseResponse<>(new PageImpl<>(mstGroupService.getListMstGroup(pageable)));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{groupId}")
     @Operation(summary = "Search department by department code")
-    public ResponseEntity<MstGroupResponse> getMstGroupByGroupId(@PathVariable Integer id) {
-        return new ResponseEntity<>(mstGroupService.getMstGroupByGroupId(id), HttpStatus.OK);
+    public BaseResponse<MstGroupResponse> getMstGroupByGroupId(@PathVariable String groupId) {
+        Integer id;
+        try {
+            id = Integer.valueOf(groupId);
+        } catch (NumberFormatException e) {
+            id = 0;
+        }
+        return mstGroupService.getMstGroupByGroupId(id);
     }
 }

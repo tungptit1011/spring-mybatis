@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface MstJapanseRepository {
-    public List<MstJapanseResponse> getAllMstJapanese(@Param("page")Pageable pageable);
+    public List<MstJapanseResponse> getListMstJapanese(@Param("page")Pageable pageable);
 
     public MstJapanseResponse getMstJapaneseByCodeLevel(@Param("codeLevel") String codeLevel);
 }

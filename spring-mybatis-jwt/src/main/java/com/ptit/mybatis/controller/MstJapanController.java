@@ -2,6 +2,7 @@ package com.ptit.mybatis.controller;
 
 import com.ptit.mybatis.dto.response.MstJapanseResponse;
 import com.ptit.mybatis.service.mstJapanse.MstJapanseService;
+import com.ptit.mybatis.utils.BaseResponse;
 import com.ptit.mybatis.utils.ConstantUrl;
 import com.ptit.mybatis.utils.ListBaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,14 +30,14 @@ public class MstJapanController {
     }
 
     @GetMapping("/list")
-    @Operation(summary = "Get all levels of Japanese")
-    public ListBaseResponse<MstJapanseResponse> getAllMstJapanese(Pageable pageable) {
-        return new ListBaseResponse(new PageImpl<>(mstJapanService.getAllMstJapanese(pageable)));
+    @Operation(summary = "Get list levels of Japanese")
+    public ListBaseResponse<MstJapanseResponse> getListMstJapanese(Pageable pageable) {
+        return new ListBaseResponse(new PageImpl<>(mstJapanService.getListMstJapanese(pageable)));
     }
 
     @GetMapping("{codeLevel}")
     @Operation(summary = "Get levels of Japanese by code level ")
-    public MstJapanseResponse getMstJapaneseByCodeLevel(@PathVariable String codeLevel) {
+    public BaseResponse getMstJapaneseByCodeLevel(@PathVariable String codeLevel) {
         return mstJapanService.getMstJapaneseByCodeLevel(codeLevel);
     }
 }
