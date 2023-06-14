@@ -11,6 +11,7 @@ import com.ptit.mybatis.utli.Meta;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,8 @@ import javax.validation.Valid;
 
 @SecurityRequirement(name = "BearerAuth")
 @RestController
-@RequestMapping(ConstantUrl.API_TBL_USER)
+@RequestMapping(ConstantUrl.V1_API + "/tbl-user")
+@Scope("prototype")
 public class TblUserController {
 
     private TblUserService tblUserService;
@@ -54,7 +56,7 @@ public class TblUserController {
         try {
             id = Integer.valueOf(userId);
         } catch (NumberFormatException e) {
-            return new BaseResponse(new Meta("200", "Requires passing in the correct format of the real number type"), userId);
+            return new BaseResponse(new Meta("200", "Requires enter in the correct format of the real number type"), "Userid: " + userId);
         }
         return tblUserService.deleteTblUser(id);
     }

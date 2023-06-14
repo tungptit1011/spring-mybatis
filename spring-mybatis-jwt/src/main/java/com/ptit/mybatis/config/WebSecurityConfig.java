@@ -1,6 +1,7 @@
 package com.ptit.mybatis.config;
 
 import com.ptit.mybatis.service.CustomUserDetailsService;
+import com.ptit.mybatis.utli.ConstantUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,9 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/rest/api/tbl-user/**").hasRole("ADMIN")
-                .antMatchers("/rest/api/mst-japan/**").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/rest/api/authenticate").permitAll().anyRequest().authenticated()
+                .antMatchers(ConstantUrl.V1_API + "/tbl-user/**").hasRole("ADMIN")
+                .antMatchers(ConstantUrl.V1_API + "/mst-japan/**", ConstantUrl.V1_API + "/mst-group/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers(ConstantUrl.V1_API + "/authenticate").permitAll().anyRequest().authenticated()
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).
                 and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and().addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);

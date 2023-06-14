@@ -4,6 +4,7 @@ import com.ptit.mybatis.config.JwtUtil;
 import com.ptit.mybatis.dto.auth.AuthenticationRequest;
 import com.ptit.mybatis.dto.auth.AuthenticationResponse;
 import com.ptit.mybatis.service.CustomUserDetailsService;
+import com.ptit.mybatis.utli.ConstantUrl;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/rest/api")
+@RequestMapping(ConstantUrl.V1_API)
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;

@@ -1,11 +1,11 @@
 package com.ptit.mybatis.service.tblUser;
 
-import com.ptit.mybatis.entity.TblDetailUserJapan;
-import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.dto.request.CreateTblUserRequest;
 import com.ptit.mybatis.dto.request.TblUserRequest;
 import com.ptit.mybatis.dto.request.UpdateTblUserRequest;
 import com.ptit.mybatis.dto.response.TblUserInforResponse;
+import com.ptit.mybatis.entity.TblDetailUserJapan;
+import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.repository.MstGroupRepository;
 import com.ptit.mybatis.repository.TblDetailUserJapanRepository;
 import com.ptit.mybatis.repository.TblUserInforRepository;
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class TblUserServiceImpl implements TblUserService {
 
     @Autowired
@@ -53,76 +54,65 @@ public class TblUserServiceImpl implements TblUserService {
     public BaseResponse deleteTblUser(Integer userId) {
         if (userId != null) {
             if (tblUserRepository.findTblUserByUserId(userId) == null) {
-                return new BaseResponse(new Meta("200", "User does not exist"), userId);
+                return new BaseResponse(new Meta("200", "User does not exist"), "userID: " + userId);
             }
             tblUserRepository.deleteTblUser(userId);
-            return new BaseResponse(new Meta("200", "Delete success"), userId);
+            return new BaseResponse(new Meta("200", "Delete success"), "userID: " + userId);
         }
-        return new BaseResponse(new Meta("200", "Delete Fail"), userId);
+        return new BaseResponse(new Meta("200", "Delete Fail"), "userID: " + userId);
     }
 
-    @Transactional
     @Override
     public BaseResponse updateTblUser(UpdateTblUserRequest tblUserRequest) {
-        try {
-            if (tblUserRepository.findTblUserByUserId(tblUserRequest.getUserId()) == null) {
-                return new BaseResponse(new Meta("200", "TblUser dont exits !"), tblUserRequest);
-            }
-
-            if (!StringUtils.isEmpty(tblUserRequest.getEmail())) {
-                TblUser tblUserResponse = tblUserRepository.findTblUserByEmail(tblUserRequest.getEmail());
-                if (tblUserResponse != null && tblUserResponse.getUserId() != tblUserRequest.getUserId())
-                    return new BaseResponse(new Meta("200", "Email already exists !"), tblUserRequest);
-            }
-
-            if (tblUserRequest.getGroupId() != null && mstGroupRepository.getMstGroupByGroupId(tblUserRequest.getGroupId()) == null) {
-                return new BaseResponse(new Meta("200", "Department does not exist !"), tblUserRequest);
-            }
-
-            TblDetailUserJapan tblDetailUserJapanInDB = tblDetailUserJapanRepository.findTblDetailUserJapanByUserId(tblUserRequest.getUserId());
-            TblDetailUserJapan tblDetailUserJapanRequest = convertTblDetailUserJapan(tblUserRequest);
-            if (!StringUtils.isEmpty(tblUserRequest.getCodeLevel())) {
-                if (tblDetailUserJapanInDB == null) {
-                    tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapanRequest);
-                } else if (tblDetailUserJapanInDB != null && !checkStatusTblDetailUserJapan(tblDetailUserJapanInDB, tblUserRequest)) {
-                    tblDetailUserJapanRepository.updateTblDetailUserJapan(tblDetailUserJapanRequest);
-                }
-            } else {
-                tblDetailUserJapanRepository.deleteTblDetailUserJapan(tblUserRequest.getUserId());
-            }
-
-            if (tblUserRepository.updateTblUser(modelMapper.map(tblUserRequest, TblUser.class)) == 1) {
-                return new BaseResponse(new Meta("200", "Update success"), tblUserRequest);
-            }
-
-            return new BaseResponse(new Meta("200", "Update Fail"));
-        } catch (Exception e) {
-            return new BaseResponse(new Meta("200", "Update Fail"), e.getStackTrace());
+        if (tblUserRepository.findTblUserByUserId(tblUserRequest.getUserId()) == null) {
+            return new BaseResponse(new Meta("200", "TblUser dont exits !"), tblUserRequest);
         }
+
+        if (!StringUtils.isEmpty(tblUserRequest.getEmail())) {
+            TblUser tblUserResponse = tblUserRepository.findTblUserByEmail(tblUserRequest.getEmail());
+            if (tblUserResponse != null && tblUserResponse.getUserId() != tblUserRequest.getUserId())
+                return new BaseResponse(new Meta("200", "Email already exists !"), tblUserRequest);
+        }
+
+        if (tblUserRequest.getGroupId() != null && mstGroupRepository.getMstGroupByGroupId(tblUserRequest.getGroupId()) == null) {
+            return new BaseResponse(new Meta("200", "Department does not exist !"), tblUserRequest);
+        }
+
+        TblDetailUserJapan tblDetailUserJapanInDB = tblDetailUserJapanRepository.findTblDetailUserJapanByUserId(tblUserRequest.getUserId());
+        TblDetailUserJapan tblDetailUserJapanRequest = convertTblDetailUserJapan(tblUserRequest);
+        if (!StringUtils.isEmpty(tblUserRequest.getCodeLevel())) {
+            if (tblDetailUserJapanInDB == null) {
+                tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapanRequest);
+            } else if (tblDetailUserJapanInDB != null && !checkStatusTblDetailUserJapan(tblDetailUserJapanInDB, tblUserRequest)) {
+                tblDetailUserJapanRepository.updateTblDetailUserJapan(tblDetailUserJapanRequest);
+            }
+        } else {
+            tblDetailUserJapanRepository.deleteTblDetailUserJapan(tblUserRequest.getUserId());
+        }
+        if (tblUserRepository.updateTblUser(modelMapper.map(tblUserRequest, TblUser.class)) == 1) {
+            return new BaseResponse(new Meta("200", "Update success"), tblUserRequest);
+        }
+        return new BaseResponse(new Meta("200", "Update Fail"));
     }
 
-    @Transactional
     @Override
     public BaseResponse createTblUser(CreateTblUserRequest tblUserRequest) {
-        try {
-            if (tblUserRepository.findTblUserByEmail(tblUserRequest.getEmail()) != null) {
-                return new BaseResponse(new Meta("200", "Email already exists !"));
-            }
-            if (tblUserRepository.findTblUserByLoginName(tblUserRequest.getLoginName()) != null) {
-                return new BaseResponse(new Meta("200", "UserName already exists !"));
-            }
-            tblUserRequest.setPassword(passwordEncoder.encode(tblUserRequest.getPassword()));
-            TblUser tblUser = modelMapper.map(tblUserRequest, TblUser.class);
-            tblUserRepository.insertTblUser(tblUser);
-            tblUserRequest.setUserId(tblUser.getUserId());
-            if (tblUserRequest.getCodeLevel() != null) {
-                TblDetailUserJapan tblDetailUserJapan = convertTblDetailUserJapan(tblUserRequest);
-                tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapan);
-            }
-            return new BaseResponse(new Meta("200", "Create Success"));
-        } catch (Exception exception) {
-            return new BaseResponse(new Meta("200", "Create Fail"), exception.getStackTrace());
+
+        if (tblUserRepository.findTblUserByEmail(tblUserRequest.getEmail()) != null) {
+            return new BaseResponse(new Meta("200", "Email already exists !"));
         }
+        if (tblUserRepository.findTblUserByLoginName(tblUserRequest.getLoginName()) != null) {
+            return new BaseResponse(new Meta("200", "UserName already exists !"));
+        }
+        tblUserRequest.setPassword(passwordEncoder.encode(tblUserRequest.getPassword()));
+        TblUser tblUser = modelMapper.map(tblUserRequest, TblUser.class);
+        tblUserRepository.insertTblUser(tblUser);
+        tblUserRequest.setUserId(tblUser.getUserId());
+        if (tblUserRequest.getCodeLevel() != null) {
+            TblDetailUserJapan tblDetailUserJapan = convertTblDetailUserJapan(tblUserRequest);
+            tblDetailUserJapanRepository.insertTblDetailUserJapan(tblDetailUserJapan);
+        }
+        return new BaseResponse(new Meta("200", "Create Success"));
     }
 
     private TblDetailUserJapan convertTblDetailUserJapan(TblUserRequest tblUserRequest) {
@@ -148,14 +138,11 @@ public class TblUserServiceImpl implements TblUserService {
     private Boolean checkStatusTblDetailUserJapan(TblDetailUserJapan tblDetailUserJapan, UpdateTblUserRequest tblUserRequest) {
         if (tblDetailUserJapan.getCodeLevel() != tblUserRequest.getCodeLevel()) {
             return false;
-        }
-        if (tblDetailUserJapan.getTotal() != tblUserRequest.getTotal()) {
+        } else if (tblDetailUserJapan.getTotal() != tblUserRequest.getTotal()) {
             return false;
-        }
-        if (tblDetailUserJapan.getStartDate() != tblUserRequest.getStartDate()) {
+        } else if (tblDetailUserJapan.getStartDate() != tblUserRequest.getStartDate()) {
             return false;
-        }
-        if (tblDetailUserJapan.getEndDate() != tblUserRequest.getEndDate()) {
+        } else if (tblDetailUserJapan.getEndDate() != tblUserRequest.getEndDate()) {
             return false;
         }
         return true;

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SecurityRequirement(name = "BearerAuth")
 @RestController
-@RequestMapping(ConstantUrl.API_MST_JAPAN)
+@RequestMapping(ConstantUrl.V1_API + "/mst-japan")
+@Scope("prototype")
 public class MstJapanController {
 
     private static final Logger logger = LoggerFactory.getLogger(MstJapanController.class);

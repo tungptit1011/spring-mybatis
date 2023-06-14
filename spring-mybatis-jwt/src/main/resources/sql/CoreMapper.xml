@@ -5,8 +5,6 @@
 <mapper namespace="Core">
 
     <sql id="pagingSql">
-<!--        <if test="_databaseId= 'h2">-->
-            OFFSET #{page.offset} ROWS FETCH NEXT #{page.pageSize} ROWS ONLY
-<!--        </if>-->
+        OFFSET #{page.offset} ROWS FETCH NEXT #{page.pageSize} ROWS ONLY
     </sql>
 </mapper>

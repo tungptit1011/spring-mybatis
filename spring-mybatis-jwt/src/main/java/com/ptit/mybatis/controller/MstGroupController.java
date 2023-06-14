@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SecurityRequirement(name = "BearerAuth")
 @RestController
-@RequestMapping(ConstantUrl.API_MST_GROUP)
+@RequestMapping(ConstantUrl.V1_API + "/mst-group")
+@Scope("prototype")
 public class MstGroupController {
 
     private static final Logger logger = LoggerFactory.getLogger(MstGroupController.class);
