@@ -115,6 +115,9 @@ public class TblUserServiceImpl implements TblUserService {
         if (tblUserRepository.findTblUserByLoginName(tblUserRequest.getLoginName()) != null) {
             return new BaseResponse(new Meta("200", "UserName already exists !"));
         }
+        if(tblUserRequest.getGroupId() != null && mstGroupRepository.getMstGroupByGroupId(tblUserRequest.getGroupId()) == null) {
+            return new BaseResponse(new Meta("200", "Department does not exist !"));
+        }
         tblUserRequest.setPassword(passwordEncoder.encode(tblUserRequest.getPassword()));
         TblUser tblUser = modelMapper.map(tblUserRequest, TblUser.class);
         tblUserRepository.insertTblUser(tblUser);
