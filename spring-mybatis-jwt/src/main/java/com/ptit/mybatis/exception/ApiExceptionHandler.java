@@ -1,8 +1,8 @@
 package com.ptit.mybatis.exception;
 
-import com.ptit.mybatis.utli.BaseResponse;
-import com.ptit.mybatis.utli.ConstantStatus;
-import com.ptit.mybatis.utli.Meta;
+import com.ptit.mybatis.utils.BaseResponse;
+import com.ptit.mybatis.utils.ConstantStatus;
+import com.ptit.mybatis.utils.Meta;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

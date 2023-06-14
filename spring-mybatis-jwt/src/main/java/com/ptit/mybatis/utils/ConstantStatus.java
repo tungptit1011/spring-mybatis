@@ -1,4 +1,4 @@
-package com.ptit.mybatis.utli;
+package com.ptit.mybatis.utils;
 
 public class ConstantStatus {
     public static final String OK = "200";

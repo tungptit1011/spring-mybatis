@@ -1,7 +1,7 @@
 package com.ptit.mybatis.config;
 
 import com.ptit.mybatis.service.CustomUserDetailsService;
-import com.ptit.mybatis.utli.ConstantUrl;
+import com.ptit.mybatis.utils.ConstantUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

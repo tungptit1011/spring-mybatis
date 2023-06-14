@@ -1,4 +1,4 @@
-package com.ptit.mybatis.utli;
+package com.ptit.mybatis.utils;
 
 import lombok.Data;
 import lombok.Getter;

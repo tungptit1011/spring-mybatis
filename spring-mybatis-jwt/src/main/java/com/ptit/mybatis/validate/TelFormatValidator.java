@@ -1,6 +1,6 @@
 package com.ptit.mybatis.validate;
 
-import com.ptit.mybatis.utli.ConstantValidator;
+import com.ptit.mybatis.utils.ConstantValidator;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.ConstraintValidator;

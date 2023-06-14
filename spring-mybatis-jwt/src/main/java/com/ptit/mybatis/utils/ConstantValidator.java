@@ -1,4 +1,4 @@
-package com.ptit.mybatis.utli;
+package com.ptit.mybatis.utils;
 
 public class ConstantValidator {
     public static final int MAX_LENGTH_EMAIL = 100;

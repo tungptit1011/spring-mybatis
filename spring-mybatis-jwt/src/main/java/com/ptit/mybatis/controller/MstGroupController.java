@@ -2,10 +2,9 @@ package com.ptit.mybatis.controller;
 
 import com.ptit.mybatis.dto.response.MstGroupResponse;
 import com.ptit.mybatis.service.mstGroup.MstGroupService;
-import com.ptit.mybatis.utli.ConstantUrl;
-import com.ptit.mybatis.utli.ListBaseResponse;
+import com.ptit.mybatis.utils.ConstantUrl;
+import com.ptit.mybatis.utils.ListBaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,9 @@ import com.ptit.mybatis.config.JwtUtil;
 import com.ptit.mybatis.dto.auth.AuthenticationRequest;
 import com.ptit.mybatis.dto.auth.AuthenticationResponse;
 import com.ptit.mybatis.service.CustomUserDetailsService;
-import com.ptit.mybatis.utli.ConstantUrl;
+import com.ptit.mybatis.utils.BaseResponse;
+import com.ptit.mybatis.utils.ConstantUrl;
+import com.ptit.mybatis.utils.Meta;
 import io.jsonwebtoken.impl.DefaultClaims;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class AuthenticationController {
 
     @PostMapping(value = "/authenticate")
     @Operation(summary = "get token")
-    public ResponseEntity<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+    public BaseResponse<AuthenticationResponse> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -47,18 +49,18 @@ public class AuthenticationController {
 
         UserDetails userdetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         String token = jwtUtil.generateToken(userdetails);
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        return new BaseResponse<>(new Meta("200", "Success"), new AuthenticationResponse(token));
     }
 
     @GetMapping(value = "/refreshtoken")
     @Operation(summary = "refresh token")
-    public ResponseEntity<?> refreshtoken(HttpServletRequest request) throws Exception {
+    public BaseResponse<AuthenticationResponse> refreshtoken(HttpServletRequest request) throws Exception {
         // From the HttpRequest get the claims
         DefaultClaims claims = (io.jsonwebtoken.impl.DefaultClaims) request.getAttribute("claims");
 
         Map<String, Object> expectedMap = getMapFromIoJsonwebtokenClaims(claims);
         String token = jwtUtil.doGenerateRefreshToken(expectedMap, expectedMap.get("sub").toString());
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        return new BaseResponse<>(new Meta("200", "Success"), new AuthenticationResponse(token));
     }
 
     private Map<String, Object> getMapFromIoJsonwebtokenClaims(DefaultClaims claims) {

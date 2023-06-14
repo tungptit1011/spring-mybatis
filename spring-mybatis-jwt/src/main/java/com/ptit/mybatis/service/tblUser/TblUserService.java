@@ -4,7 +4,7 @@ import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.dto.request.CreateTblUserRequest;
 import com.ptit.mybatis.dto.request.UpdateTblUserRequest;
 import com.ptit.mybatis.dto.response.TblUserInforResponse;
-import com.ptit.mybatis.utli.BaseResponse;
+import com.ptit.mybatis.utils.BaseResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
