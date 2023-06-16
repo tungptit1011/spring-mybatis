@@ -1,3 +1,6 @@
+/**
+ * Copyright 2023 NguyenDacTung
+ */
 package com.ptit.mybatis.validate;
 
 import com.ptit.mybatis.utils.ConstantValidator;

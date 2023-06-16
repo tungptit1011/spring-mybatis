@@ -1,7 +1,10 @@
+/**
+ * Copyright 2023 NguyenDacTung
+ */
 package com.ptit.mybatis.repository;
 
-import com.ptit.mybatis.entity.TblUser;
 import com.ptit.mybatis.dto.response.TblUserInforResponse;
+import com.ptit.mybatis.entity.TblUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;

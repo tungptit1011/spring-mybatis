@@ -1,3 +1,6 @@
+/**
+ * Copyright 2023 NguyenDacTung
+ */
 package com.ptit.mybatis.service;
 
 import com.ptit.mybatis.entity.TblUser;

@@ -1,3 +1,6 @@
+/**
+ * Copyright 2023 NguyenDacTung
+ */
 package com.ptit.mybatis.service.mstGroup;
 
 import com.ptit.mybatis.dto.response.MstGroupResponse;
