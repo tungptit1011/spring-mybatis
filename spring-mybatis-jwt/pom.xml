@@ -23,6 +23,18 @@
 		<spring-framework.version>5.3.21</spring-framework.version>
 	</properties>
 	<dependencies>
+		<!-- Mockito extention -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.4.1</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

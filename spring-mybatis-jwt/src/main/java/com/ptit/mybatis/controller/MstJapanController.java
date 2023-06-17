@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ConstantUrl.V1_API + "/mst-japan")
 public class MstJapanController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MstJapanController.class);
-
     private final MstJapanseService mstJapanService;
 
     public MstJapanController(MstJapanseService mstJapanService) {

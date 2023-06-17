@@ -14,8 +14,6 @@ import java.util.List;
 
 public interface TblUserService {
 
-    TblUser findTblUserByLoginName(String loginName);
-
     List<TblUserInforResponse> getListlUsers(Integer groupId, String fullName, Pageable pageable);
 
     BaseResponse updateTblUser(UpdateTblUserRequest updateTblUserRequest);
