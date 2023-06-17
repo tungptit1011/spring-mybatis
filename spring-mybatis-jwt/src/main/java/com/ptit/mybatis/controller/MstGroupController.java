@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(ConstantUrl.V1_API + "/mst-group")
 public class MstGroupController {
 
-    private static final Logger logger = LoggerFactory.getLogger(MstGroupController.class);
-
     @Autowired
     private MstGroupService mstGroupService;
 

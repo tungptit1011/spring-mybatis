@@ -20,8 +20,6 @@ import java.util.List;
 @Slf4j
 public class MstJapanseServiceImpl implements MstJapanseService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MstJapanseServiceImpl.class);
-
     @Autowired
     private MstJapanseRepository mstJapanseRepository;
 

@@ -51,11 +51,6 @@ public class TblUserServiceImpl implements TblUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public TblUser findTblUserByLoginName(String loginName) {
-        return tblUserRepository.findTblUserByLoginName(loginName);
-    }
-
-    @Override
     public List<TblUserInforResponse> getListlUsers(Integer groupId, String fullName, Pageable pageable) {
         return tblUserRepository.getListlUsers(groupId, fullName, pageable);
     }

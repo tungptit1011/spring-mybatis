@@ -20,8 +20,6 @@ import java.util.List;
 @Slf4j
 public class MstGroupServiceImpl implements MstGroupService {
 
-    private static final Logger logger = LoggerFactory.getLogger(MstGroupServiceImpl.class);
-
     @Autowired
     private MstGroupRepository mstGroupRepository;
 
